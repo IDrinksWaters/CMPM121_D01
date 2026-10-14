@@ -86,17 +86,17 @@ const recruitButton = document.querySelector<HTMLButtonElement>(
   "#increment_button",
 )!;
 
-//Update the displayed numbers.
+// Update the displayed numbers.
 function updateDisplay(): void {
-  message.textContent = "Milk Dragons: ${milkDragonCount}";
+  message.textContent = "Milk Dragons: " + milkDragonCount;
 
-  soldierCountText.textContent = "Max Soldiers: ${maxSoldierCount} | " +
-    "Salt Soldiers: ${saltSoldierCount} | " +
-    "Water Bottle Soldiers: ${waterBottleSoldierCount}";
+  soldierCountText.textContent = "Max Soldiers: " + maxSoldierCount +
+    " | Salt Soldiers: " + saltSoldierCount +
+    " | Water Bottle Soldiers: " + waterBottleSoldierCount;
 
-  totalPowerText.textContent = "Current Total Power: ${calculateTotalPower()}";
+  totalPowerText.textContent = "Current Total Power: " + calculateTotalPower();
 
-  recruitButton.textContent = "Gain Soldiers! (+${clickStart})";
+  recruitButton.textContent = "Gain Soldiers! (+" + clickStart + ")";
 }
 
 //Recruit Milk Dragons using the current click amount.
