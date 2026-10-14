@@ -2,25 +2,13 @@
 // even this tiny example demonstrates a separately deployed asset.
 // @deno-types="./asset-url.d.ts"
 // this is a test
-import tileUrl from "./assets/tile.svg?no-inline";
 
 const app = document.querySelector<HTMLElement>("#app")!;
-
-const heading = document.createElement("h1");
-heading.textContent = "D1 project";
-
-const image = document.createElement("img");
-image.src = tileUrl;
-image.alt = "A teal tile with a cream circle";
-image.width = 96;
-image.height = 96;
 
 const message = document.createElement("p");
 message.textContent = "Milk Dragons: 0";
 
-app.append(heading, image, message);
-
-//--------------------------------------------
+//-------------------- VARIABLES HERE
 //For number count
 let milkDragonCount = 0;
 let maxSoldierCount = 0;
@@ -28,41 +16,34 @@ let saltSoldierCount = 0;
 let waterBottleSoldierCount = 0;
 
 //For click counter
-let clickStart = 1;
+const clickStart = 1;
 
 //For required power
-let maxReqPower = 100;
-let saltReqPower = 500;
-let waterBottleReqPower = 1000;
+const maxReqPower = 100;
+const saltReqPower = 500;
+const waterBottleReqPower = 1000;
 
 //For base_power
-let milkDragonBasePower = 1;
-let maxSoldierBasePower = 10;
-let saltSoldierBasePower = 50;
-let waterBottleSoldierBasePower = 100;
+const milkDragonBasePower = 1;
+const maxSoldierBasePower = 10;
+const saltSoldierBasePower = 50;
+const waterBottleSoldierBasePower = 100;
 
-//For base_production speed (BPS)
-let milkDragonBPS = 0;
-let maxSoldierBPS = 0.1;
-let saltSoldierBPS = 0.1;
-let waterBottleSoldierBPS = 0.1;
+//Use the original base power as the bonus requirement.
+const maxMilkRequirement = maxSoldierBasePower;
+const saltMilkRequirement = saltSoldierBasePower;
+const waterBottleMilkRequirement = waterBottleSoldierBasePower;
 
-//For power upgrades
+const maxSoldierBPS = 0.1;
+const saltSoldierBPS = 0.1;
+const waterBottleSoldierBPS = 0.1;
 
-let milkDragonTroopCamp: boolean = false;
-let maxTroopCamp: boolean = false;
-let saltTroopCamp: boolean = false;
-let waterBottleTroopCamp: boolean = false;
+//Track Milk Dragons produced after each troop is unlocked.
+let maxMilkProgress = 0;
+let saltMilkProgress = 0;
+let waterBottleMilkProgress = 0;
 
-let milkDragonBlackSmith: boolean = false;
-let maxBlackSmith: boolean = false;
-let saltBottleBlackSmith: boolean = false;
-let waterBottleBlackSmith: boolean = false;
-
-let advertisement: boolean = false;
-let cloneTechnology: boolean = false;
-
-//--------------------------------------------
+//-----------
 
 //Calucate the combined power of all troops.
 function calculateTotalPower(): number {
@@ -159,10 +140,8 @@ function startMaxProduction(): void {
 
     lastUpdateTime = currentTime;
 
-    //Accumulate production using the current BPS.
     productionProgress += elapsedSeconds * maxSoldierBPS;
 
-    //Only add completed soldiers.
     const newSoldiers = Math.floor(productionProgress);
 
     if (newSoldiers > 0) {
@@ -315,13 +294,47 @@ function updateDisplay(): void {
   }
 }
 
+//Produce Milk Dragons and award unlocked bonus soldiers.
+function produceMilkDragons(amount: number): void {
+  milkDragonCount += amount;
+
+  if (maxUnlocked) {
+    maxMilkProgress += amount;
+
+    const bonusSoldiers = Math.floor(maxMilkProgress / maxMilkRequirement);
+
+    maxSoldierCount += bonusSoldiers;
+    maxMilkProgress %= maxMilkRequirement;
+  }
+
+  if (saltUnlocked) {
+    saltMilkProgress += amount;
+
+    const bonusSoldiers = Math.floor(saltMilkProgress / saltMilkRequirement);
+
+    saltSoldierCount += bonusSoldiers;
+    saltMilkProgress %= saltMilkRequirement;
+  }
+
+  if (waterBottleUnlocked) {
+    waterBottleMilkProgress += amount;
+
+    const bonusSoldiers = Math.floor(
+      waterBottleMilkProgress / waterBottleMilkRequirement,
+    );
+
+    waterBottleSoldierCount += bonusSoldiers;
+    waterBottleMilkProgress %= waterBottleMilkRequirement;
+  }
+
+  updateDisplay();
+}
+
 //Recruit Milk Dragons using the current click amount.
 recruitButton.addEventListener("click", () => {
-  milkDragonCount += clickStart;
-  updateDisplay();
+  produceMilkDragons(clickStart);
 });
 
-app.append(soldierCountText);
+app.append(message, soldierCountText);
 
-//Show the initial game state.
 updateDisplay();

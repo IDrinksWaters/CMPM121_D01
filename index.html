@@ -8,17 +8,45 @@
   <style>
   body {
     background-image: url('src/assets/milk_dragon_dark.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  h1 {
+    font-family: "Courier New", Courier, monospace;
+    color: rgb(255, 255, 255);
+  }
+
+  h3 {
+    font-family: "Courier New", Courier, monospace;
+    color: rgb(255, 255, 255);
+  }
+
+  p {
+    font-family: "Verdana", Courier, monospace;
+    color: rgb(255, 255, 255);
+  }
+  button {
+    border: none;
+    color: rgb(0, 0, 0);
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-family: "Courier New", Courier, monospace;
   }
   </style>
   <body>
-    <main id="app"></main>
-    <script type="module" src="/src/main.ts"></script>
     <h1> Milk Dragon Army </h1>
     <h3> Welcome to the Milk Dragon Army! </h3>
-    <h3> You must claim all the territories to ensure the survival of our community. </h3>
+    <h3> You must defeat all enemies to ensure the survival of your kingdom. </h3>
     <h3> --------------------------------------------------------- </h3>
+    <main id="app"></main>
+    <script type="module" src="/src/main.ts"></script>
     <p id="total_power_display"> Current Total Power: 0 </p>
     <button id="increment_button"> Gain Soldiers! </button>
 
