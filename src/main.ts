@@ -73,3 +73,39 @@ function calculateTotalPower(): number {
     waterBottleSoldierCount * waterBottleSoldierBasePower
   );
 }
+
+//Create text for the other three armies.
+const soldierCountText = document.createElement("p");
+
+//Create text for total power.
+const totalPowerText = document.querySelector<HTMLParagraphElement>(
+  "#total_power_display",
+)!;
+//Create the recruitment button.
+const recruitButton = document.querySelector<HTMLButtonElement>(
+  "#increment_button",
+)!;
+
+//Update the displayed numbers.
+function updateDisplay(): void {
+  message.textContent = "Milk Dragons: ${milkDragonCount}";
+
+  soldierCountText.textContent = "Max Soldiers: ${maxSoldierCount} | " +
+    "Salt Soldiers: ${saltSoldierCount} | " +
+    "Water Bottle Soldiers: ${waterBottleSoldierCount}";
+
+  totalPowerText.textContent = "Current Total Power: ${calculateTotalPower()}";
+
+  recruitButton.textContent = "Gain Soldiers! (+${clickStart})";
+}
+
+//Recruit Milk Dragons using the current click amount.
+recruitButton.addEventListener("click", () => {
+  milkDragonCount += clickStart;
+  updateDisplay();
+});
+
+app.append(soldierCountText);
+
+//Show the initial game state.
+updateDisplay();
