@@ -86,7 +86,52 @@ const recruitButton = document.querySelector<HTMLButtonElement>(
   "#increment_button",
 )!;
 
-// Update the displayed numbers.
+//Track whether Max has been unlocked.
+let maxUnlocked = false;
+
+//Connect to the Max unlock button.
+const maxUnlockButton = document.querySelector<HTMLButtonElement>(
+  "#unlock_max_button",
+)!;
+
+//Start automatic production of Max soldiers.
+function startMaxProduction(): void {
+  let productionProgress = 0;
+  let lastUpdateTime = performance.now();
+
+  setInterval(() => {
+    //Calculate the elapsed time in seconds.
+    const currentTime = performance.now();
+    const elapsedSeconds = (currentTime - lastUpdateTime) / 1000;
+
+    lastUpdateTime = currentTime;
+
+    //Accumulate production using the current BPS.
+    productionProgress += elapsedSeconds * maxSoldierBPS;
+
+    //Only add completed soldiers.
+    const newSoldiers = Math.floor(productionProgress);
+
+    if (newSoldiers > 0) {
+      maxSoldierCount += newSoldiers;
+      productionProgress -= newSoldiers;
+      updateDisplay();
+    }
+  }, 100);
+}
+
+//Unlock Max when enough power is available.
+maxUnlockButton.addEventListener("click", () => {
+  if (maxUnlocked || calculateTotalPower() < maxReqPower) {
+    return;
+  }
+
+  maxUnlocked = true;
+  startMaxProduction();
+  updateDisplay();
+});
+
+//Update the displayed numbers.
 function updateDisplay(): void {
   message.textContent = "Milk Dragons: " + milkDragonCount;
 
@@ -97,6 +142,17 @@ function updateDisplay(): void {
   totalPowerText.textContent = "Current Total Power: " + calculateTotalPower();
 
   recruitButton.textContent = "Gain Soldiers! (+" + clickStart + ")";
+
+  //Enable unlocking only when the required power is reached.
+  maxUnlockButton.disabled = maxUnlocked || calculateTotalPower() < maxReqPower;
+
+  //Show whether Max has been unlocked.
+  if (maxUnlocked) {
+    maxUnlockButton.textContent = "Max Defeated";
+  } else {
+    maxUnlockButton.textContent = "Attack Max (Requires " + maxReqPower +
+      " Power)";
+  }
 }
 
 //Recruit Milk Dragons using the current click amount.
