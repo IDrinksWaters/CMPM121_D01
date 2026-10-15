@@ -258,7 +258,8 @@ function updateDisplay(): void {
 
   //Show whether Max has been unlocked.
   if (maxUnlocked) {
-    maxUnlockButton.textContent = "Max Defeated";
+    maxUnlockButton.textContent =
+      `Max Defeated | Auto: ${maxSoldierBPS} soldiers/s`;
   } else {
     maxUnlockButton.textContent = "Attack Max (Requires " + maxReqPower +
       " Power)";
@@ -270,7 +271,8 @@ function updateDisplay(): void {
     calculateTotalPower() < saltReqPower;
 
   if (saltUnlocked) {
-    saltUnlockButton.textContent = "Salt Defeated";
+    saltUnlockButton.textContent =
+      `Salt Defeated | Auto: ${saltSoldierBPS} soldiers/s`;
   } else if (!maxUnlocked) {
     saltUnlockButton.textContent = "Attack Salt (Defeat Max First)";
   } else {
@@ -284,7 +286,8 @@ function updateDisplay(): void {
     calculateTotalPower() < waterBottleReqPower;
 
   if (waterBottleUnlocked) {
-    waterBottleUnlockButton.textContent = "Water Bottle Defeated";
+    waterBottleUnlockButton.textContent =
+      `Water Bottle Defeated | Auto: ${waterBottleSoldierBPS} soldiers/s`;
   } else if (!saltUnlocked) {
     waterBottleUnlockButton.textContent =
       "Attack Water Bottle (Defeat Salt First)";
